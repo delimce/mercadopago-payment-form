@@ -74,14 +74,23 @@ function setPaymentMethodInfo(status, response) {
 
 function sdkResponseHandler(status, response) {
 
-    console.log(response);
+    result = {}
 
     if (status != 200 && status != 201) {
         error_data = response;
-        var message = errorHandler(error_data.cause[0].code)
+        last = error_data.cause.length-1;
+        var message = errorHandler(error_data.cause[last].code)
         alert("verify filled data: " + message);
+
+        result.success = false;
+        result.error = message;
+
     } else {
 
+        result.success = true;
+        result.token = response.id;
+
+/*
         var form = document.querySelector('#pay');
         var card = document.createElement('input');
         card.setAttribute('name', "token");
@@ -89,8 +98,12 @@ function sdkResponseHandler(status, response) {
         card.setAttribute('value', response.id);
         form.appendChild(card);
         doSubmit = true;
+*/
+
         //  form.submit();
     }
+
+    console.log(result);
 };
 
 
