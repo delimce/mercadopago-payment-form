@@ -27,6 +27,7 @@ function getBin() {
     return ccNumber.value.replace(/[ .-]/g, '').slice(0, 6);
 };
 
+
 function guessingPaymentMethod(event) {
     var bin = getBin();
 
@@ -46,6 +47,10 @@ function guessingPaymentMethod(event) {
         }, 100);
     }
 };
+
+
+
+
 
 function setPaymentMethodInfo(status, response) {
     if (status == 200) {
@@ -72,9 +77,32 @@ function setPaymentMethodInfo(status, response) {
 
 
 
+
+
+
+function doPay(event) {
+    event.preventDefault();
+    if (!doSubmit) {
+        
+
+        Mercadopago.clearSession(); ///mega important!!!
+
+        Mercadopago.setPublishableKey(MP_key);
+
+        var $form = document.querySelector('#pay');
+        
+        Mercadopago.createToken($form, sdkResponseHandler); // The function "sdkResponseHandler" is defined below
+
+        return false;
+    }
+};
+
+
+
+
 function sdkResponseHandler(status, response) {
 
-    result = {}
+   var result = {}
 
     if (status != 200 && status != 201) {
         error_data = response;
@@ -90,15 +118,9 @@ function sdkResponseHandler(status, response) {
         result.success = true;
         result.token = response.id;
 
-/*
-        var form = document.querySelector('#pay');
-        var card = document.createElement('input');
-        card.setAttribute('name', "token");
-        card.setAttribute('type', "hidden");
-        card.setAttribute('value', response.id);
-        form.appendChild(card);
-        doSubmit = true;
-*/
+
+     //   doSubmit = true;
+
 
         //  form.submit();
     }
@@ -163,15 +185,3 @@ function errorHandler(code) {
 
 }
 
-
-
-function doPay(event) {
-    event.preventDefault();
-    if (!doSubmit) {
-        var $form = document.querySelector('#pay');
-
-        Mercadopago.createToken($form, sdkResponseHandler); // The function "sdkResponseHandler" is defined below
-
-        return false;
-    }
-};
