@@ -105,7 +105,7 @@ function sdkResponseHandler(status, response) {
    var result = {}
 
     if (status != 200 && status != 201) {
-        error_data = response;
+        var error_data = response;
         last = error_data.cause.length-1;
         var message = errorHandler(error_data.cause[last].code)
         alert("verify filled data: " + message);
